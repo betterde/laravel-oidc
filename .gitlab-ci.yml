@@ -14,7 +14,7 @@ staging:
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-    - ssh -p "$SSH_PORT" -o StrictHostKeyChecking=no root@"$PREVIEW_SERVER" "cd $PACKAGE_PATH/repository && git checkout dev && git pull"
+    - ssh -p "$SSH_PORT" -o StrictHostKeyChecking=no root@"$PREVIEW_SERVER" "cd $PACKAGE_PATH/repository && git checkout develop && git pull"
 release:
   image: betterde/deployer:6.8.0
   stage: release
