@@ -1,0 +1,27 @@
+stages:
+  - staging
+  - release
+
+staging:
+  image: betterde/rsync:latest
+  stage: staging
+  only:
+    refs:
+      - develop
+  tags:
+    - backend
+  script:
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh -p "$SSH_PORT" -o StrictHostKeyChecking=no root@"$PREVIEW_SERVER" "cd $PACKAGE_PATH/repository && git checkout dev && git pull"
+release:
+  image: betterde/deployer:6.8.0
+  stage: release
+  only:
+    refs:
+      - tags
+  tags:
+    - backend
+  script:
+    - 'curl --header "Job-Token: $CI_JOB_TOKEN" --data tag="$CI_COMMIT_REF_NAME" "https://gitlab.shenjumiaosuan.com/api/v4/projects/$CI_PROJECT_ID/packages/composer"'
