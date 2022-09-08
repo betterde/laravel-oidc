@@ -2,6 +2,7 @@
 
 namespace Package\Oidc;
 
+use Illuminate\Support\Arr;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 
@@ -36,15 +37,15 @@ class OIDCUserProvider implements UserProvider
     public function retrieveByCredentials(array $credentials): Operator
     {
         return new Operator([
-            'id' => $credentials['sub'],
-            'name' => $credentials['name'],
-            'email' => $credentials['email'],
-            'rules' => $credentials['urn:zitadel:iam:org:project:roles'],
-            'gender' => $credentials['gender'],
-            'locale' => $credentials['locale'],
-            'picture' => $credentials['picture'],
-            'preferred_username' => $credentials['preferred_username'],
-            'updated_at' => $credentials['updated_at'],
+            'id' => Arr::get($credentials, 'sub'),
+            'name' => Arr::get($credentials, 'name'),
+            'email' => Arr::get($credentials, 'email'),
+            'rules' => Arr::get($credentials, 'urn:zitadel:iam:org:project:roles'),
+            'gender' => Arr::get($credentials, 'gender'),
+            'locale' => Arr::get($credentials, 'locale'),
+            'picture' => Arr::get($credentials, 'picture'),
+            'preferred_username' => Arr::get($credentials, 'preferred_username'),
+            'updated_at' => Arr::get($credentials, 'updated_at')
         ]);
     }
 
